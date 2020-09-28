@@ -81,12 +81,9 @@ d3.csv(csvPath).then(function(liveData, err) {
             .append("circle")
             .attr("cx", d => xLinearScale(d.income))
             .attr("cy", d => yLinearScale(d.obesity))
-            .attr("r", "10")
+            .attr("r", "12")
             .attr("fill", "grey")
             .attr("opacity", "0.4");
-
-
-            
 
         let stateAbber = chartGroup.selectAll("abbr")
             .data(liveData)
@@ -95,46 +92,44 @@ d3.csv(csvPath).then(function(liveData, err) {
             .text(d => d.abbr)
             .attr("x", d => xLinearScale(d.income))
             .attr("y", d => yLinearScale(d.obesity))
-            .attr("font-size", "8px")
-            .style("text-anchor", "center");
+            .attr("font-size", "10px")
+            .style("text-anchor", "middle");
 
-
-
+        chartGroup.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - margin.left + 40)
+            .attr("x", 0 - (height / 1.5))
+            .attr("dy", "1em")
+            .attr("class", "axisText")
+            .text("Obesity Rate");
+            //chart titles
+        chartGroup.append("text")
+            .attr("transform", `translate(${width / 2.5}, ${height + margin.top+ 10})`)
+            .attr("class", "axisText")
+            .text("Average Income");
 
         var toolTip = d3.tip()
-            .attr("class", "tooltip")
-            .offset([60,-40])
+            .attr("class", "d3-tip")
+            .offset([60 , -40])
             .html(function(d) {
-            return (`${d.state}<br>Obesity Rate: ${d.obesity}<br>Average Income: ${d.income}`);
+                return (`${d.state}<br>Average Income: ${d.income}<br>Average Obesity Rate: ${d.obesity}`)
             });
-        
+
         chartGroup.call(toolTip);
 
-        circlesGroup.on("click", function(data) {
+        circlesGroup.on("mouseover", function(data) {
             toolTip.show(data, this);
         })
 
-         .on("mouseout", function(data, index) {
-            toolTip.hide(data);
-         });
 
-        //chart titles
+
+
+
+       
 });
 
  
 
-chartGroup.append("text")
-.attr("transform", "rotate(-90)")
-.attr("y", 0 - margin.left + 40)
-.attr("x", 0 - (height / 1.5))
-.attr("dy", "1em")
-.attr("class", "axisText")
-.text("Obesity Rate");
-//chart titles
-chartGroup.append("text")
-.attr("transform", `translate(${width / 2.5}, ${height + margin.top+ 10})`)
-.attr("class", "axisText")
-.text("Average Income");
 
 
 
